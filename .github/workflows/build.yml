@@ -28,4 +28,14 @@ jobs:
       - name: Build and test
         run: mvn --batch-mode verify "-Dgpg.skip=true"
 
+  publish_snapshot:
+    if: ${{ github.event_name == 'push' }}
+    needs: build
+    uses: ./.github/workflows/publish-snapshot.yml
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+      CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+
 

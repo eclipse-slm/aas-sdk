@@ -1,24 +1,21 @@
 name: Publish Snapshot package to the Maven Central Repository
 on:
-  workflow_run:
-    workflows:
-      - Build and Test
-    types:
-      - completed
-    branches:
-      - main
-      - develop
-
-
+  workflow_call:
+    secrets:
+      GPG_PRIVATE_KEY:
+        required: true
+      GPG_PASSPHRASE:
+        required: true
+      CENTRAL_SONATYPE_TOKEN_USERNAME:
+        required: true
+      CENTRAL_SONATYPE_TOKEN_PASSWORD:
+        required: true
 
 jobs:
   publish:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v4
         with:
