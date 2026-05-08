@@ -106,6 +106,8 @@ public class SubmodelRepositoryClient {
 
     public void createOrUpdateSubmodel(Submodel submodel) {
         try {
+            submodel.setIdShort(SubmodelSanitizer.sanitizeIdShort(submodel.getIdShort(), LOG));
+            SubmodelSanitizer.sanitizeSubmodel(submodel, LOG);
             this.connectedSubmodelRepository.createSubmodel(submodel);
         } catch (CollidingIdentifierException e) {
             this.connectedSubmodelRepository.updateSubmodel(submodel.getId(), submodel);

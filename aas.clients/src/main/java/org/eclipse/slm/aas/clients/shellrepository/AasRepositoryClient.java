@@ -2,6 +2,7 @@ package org.eclipse.slm.aas.clients.shellrepository;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.KeyTypes;
+import org.eclipse.digitaltwin.aas4j.v3.model.ReferenceTypes;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultKey;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
@@ -66,6 +67,7 @@ public class AasRepositoryClient {
     public void addSubmodelReferenceToAas(String aasId, String smId) {
         try {
             var submodelReference = new DefaultReference.Builder()
+                    .type(ReferenceTypes.MODEL_REFERENCE)
                     .keys(new DefaultKey.Builder()
                             .type(KeyTypes.SUBMODEL)
                             .value(smId).build())
