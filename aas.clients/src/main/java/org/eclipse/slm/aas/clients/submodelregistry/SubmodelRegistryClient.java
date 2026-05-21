@@ -32,7 +32,7 @@ public class SubmodelRegistryClient {
             return submodelDescriptors;
         } catch (FeignResponseException e) {
             if (e.getStatusCode() != 404) {
-                LOG.error(e.getMessage());
+                LOG.debug(e.getMessage());
             }
             return submodelDescriptors;
         }
@@ -45,7 +45,7 @@ public class SubmodelRegistryClient {
             return Optional.of(submodelDescriptor);
         } catch (FeignResponseException e) {
             if (e.getStatusCode() != 404) {
-                LOG.error(e.getMessage());
+                LOG.debug(e.getMessage());
             }
             return Optional.empty();
         }

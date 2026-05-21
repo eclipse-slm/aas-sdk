@@ -49,7 +49,7 @@ public class AasRegistryClient {
                 LOG.debug("Error while getting AAS Descriptor with id {}: {}", aasId, e.getMessage());
                 return Optional.empty();
             }
-            LOG.error("Error while getting AAS Descriptor with id {}: {}", aasId, e.getMessage());
+            LOG.debug("Error while getting AAS Descriptor with id {}: {}", aasId, e.getMessage());
             return Optional.empty();
         }
     }

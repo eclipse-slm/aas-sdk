@@ -49,10 +49,9 @@ public class AasRepositoryClient {
         try {
             this.connectedAasRepository.getAas(aasId);
         } catch (ElementDoesNotExistException e) {
-            LOG.error("AAS with id '{}' does not exist", aasId);
             return Optional.empty();
         } catch (RuntimeException e) {
-            LOG.error("Error while retrieving AAS with id {}: {}", aasId, e.getMessage());
+            LOG.debug("Error while retrieving AAS with id {}: {}", aasId, e.getMessage());
             return Optional.empty();
         }
         var aas = this.connectedAasRepository.getAas(aasId);
