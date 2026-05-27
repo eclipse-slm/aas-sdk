@@ -56,6 +56,7 @@
         <module>aas.clients</module>
         <module>aas.model</module>
         <module>aas.repositories</module>
+        <module>aas.test</module>
     </modules>
 
     <properties>
