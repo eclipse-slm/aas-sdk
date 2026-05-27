@@ -20,7 +20,18 @@ public class SubmodelRegistryClient {
     private final SubmodelRegistryApiClient submodelRegistryApiClient;
 
     public SubmodelRegistryClient(String submodelRegistryUrl, AuthRequestInterceptor authRequestInterceptor) {
-        this.submodelRegistryApiClient = FeignClientFactory.createClient(SubmodelRegistryApiClient.class, submodelRegistryUrl, authRequestInterceptor);
+        this(submodelRegistryUrl, authRequestInterceptor, false);
+    }
+
+    public SubmodelRegistryClient(String submodelRegistryUrl,
+                                  AuthRequestInterceptor authRequestInterceptor,
+                                  boolean disableSslCertificateValidation) {
+        this.submodelRegistryApiClient = FeignClientFactory.createClient(
+                SubmodelRegistryApiClient.class,
+                submodelRegistryUrl,
+                authRequestInterceptor,
+                disableSslCertificateValidation
+        );
     }
 
     public List<SubmodelDescriptor> getAllSubmodelDescriptors() {

@@ -23,7 +23,18 @@ public class AasRegistryClient {
     private final AasRegistryApiClient aasRegistryApiClient;
 
     public AasRegistryClient(String aasRegistryUrl, AuthRequestInterceptor authRequestInterceptor) {
-        this.aasRegistryApiClient = FeignClientFactory.createClient(AasRegistryApiClient.class, aasRegistryUrl, authRequestInterceptor);
+        this(aasRegistryUrl, authRequestInterceptor, false);
+    }
+
+    public AasRegistryClient(String aasRegistryUrl,
+                             AuthRequestInterceptor authRequestInterceptor,
+                             boolean disableSslCertificateValidation) {
+        this.aasRegistryApiClient = FeignClientFactory.createClient(
+                AasRegistryApiClient.class,
+                aasRegistryUrl,
+                authRequestInterceptor,
+                disableSslCertificateValidation
+        );
     }
 
     public GetAssetAdministrationShellDescriptorsResult getAllShellDescriptors(GetAllShellDescriptorsFilter filter) {
