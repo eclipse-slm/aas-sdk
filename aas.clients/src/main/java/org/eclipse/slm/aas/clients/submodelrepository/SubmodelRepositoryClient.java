@@ -3,6 +3,7 @@ package org.eclipse.slm.aas.clients.submodelrepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.DeserializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.json.JsonDeserializer;
+import org.eclipse.digitaltwin.aas4j.v3.model.OperationVariable;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 import org.eclipse.digitaltwin.basyx.core.exceptions.CollidingIdentifierException;
@@ -36,7 +37,7 @@ public class SubmodelRepositoryClient {
     private final SubmodelRepositoryQueryApiClient submodelRepositoryQueryApiClient;
 
     public SubmodelRepositoryClient(String submodelRepositoryUrl) {
-        this(submodelRepositoryUrl, null);
+        this(submodelRepositoryUrl, (AuthRequestInterceptor) null);
     }
 
     public SubmodelRepositoryClient(String submodelRepositoryUrl, AuthRequestInterceptor authRequestInterceptor) {
@@ -47,6 +48,12 @@ public class SubmodelRepositoryClient {
         this.connectedSubmodelRepository = new ConnectedSubmodelRepository(submodelRepositoryUrl, submodelRepositoryApi);
 
         this.submodelRepositoryQueryApiClient = FeignClientFactory.createClient(SubmodelRepositoryQueryApiClient.class, submodelRepositoryUrl, authRequestInterceptor);
+    }
+
+    SubmodelRepositoryClient(String submodelRepositoryUrl, ConnectedSubmodelRepository connectedSubmodelRepository) {
+        this.submodelRepositoryUrl = submodelRepositoryUrl;
+        this.connectedSubmodelRepository = connectedSubmodelRepository;
+        this.submodelRepositoryQueryApiClient = null;
     }
 
     public List<Submodel> getAllSubmodels() throws DeserializationException {
@@ -133,6 +140,10 @@ public class SubmodelRepositoryClient {
             LOG.error("Error while fetching submodel element with idShortPath '" + smeIdShort + "' in submodel with id '" + submodelId + "': " + e.getMessage(), e);
             return null;
         }
+    }
+
+    public OperationVariable[] invokeOperation(String submodelId, String idShortPath, OperationVariable[] input) throws ElementDoesNotExistException {
+        return this.connectedSubmodelRepository.invokeOperation(submodelId, idShortPath, input);
     }
 
     public void createSubmodelElement(String submodelId, SubmodelElement submodelElement) {
