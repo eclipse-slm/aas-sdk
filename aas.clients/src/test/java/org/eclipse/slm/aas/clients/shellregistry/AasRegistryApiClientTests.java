@@ -8,12 +8,11 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelDescriptor;
 import org.eclipse.slm.aas.model.shellregistry.exceptions.ShellDescriptorNotFoundException;
 import org.eclipse.slm.aas.model.shellregistry.exceptions.SubmodelDescriptorNotFoundException;
 import org.eclipse.slm.aas.model.shellregistry.requests.GetAllShellDescriptorsFilter;
+import org.eclipse.slm.aas.testcontainers.AasRegistryTestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -26,13 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class AasRegistryApiClientTests {
 
     @Container
-    static GenericContainer<?> aasRegistry = new GenericContainer<>("eclipsebasyx/aas-registry-log-mem:2.0.0-milestone-07")
-            .withExposedPorts(8080)
-            .withEnv("BASYX_CORS_ALLOWEDORIGINS", "*")
-            .withEnv("BASYX_CORS_ALLOWEDMETHODS", "GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD")
-            .withEnv("MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE", "health,info")
-            .withEnv("MANAGEMENT_INFO_GIT_ENABLED", "false")
-            .waitingFor(Wait.forHttp("/actuator/health").forStatusCode(200));
+    static AasRegistryTestContainer aasRegistry = AasRegistryTestContainer.builder().build();
 
     private AasRegistryClient aasRegistryClient;
 
@@ -47,7 +40,7 @@ public class AasRegistryApiClientTests {
 
     @BeforeEach
     public void setUp() {
-        var registryUrl = "http://" + aasRegistry.getHost() + ":" + aasRegistry.getMappedPort(8080);
+        var registryUrl = aasRegistry.getExternalUrl();
         this.aasRegistryClient = new AasRegistryClient(registryUrl, null);
     }
 

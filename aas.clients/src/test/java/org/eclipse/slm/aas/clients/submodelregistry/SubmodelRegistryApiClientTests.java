@@ -6,12 +6,11 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultEndpoint;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProtocolInformation;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelDescriptor;
 import org.eclipse.slm.aas.clients.base.FeignClientFactory;
+import org.eclipse.slm.aas.testcontainers.SubmodelRegistryTestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -24,13 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class SubmodelRegistryApiClientTests {
 
     @Container
-    static GenericContainer<?> submodelRegistry = new GenericContainer<>("eclipsebasyx/submodel-registry-log-mem:2.0.0-milestone-07")
-            .withExposedPorts(8080)
-            .withEnv("BASYX_CORS_ALLOWEDORIGINS", "*")
-            .withEnv("BASYX_CORS_ALLOWEDMETHODS", "GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD")
-            .withEnv("MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE", "health,info")
-            .withEnv("MANAGEMENT_INFO_GIT_ENABLED", "false")
-            .waitingFor(Wait.forHttp("/actuator/health").forStatusCode(200));
+    static SubmodelRegistryTestContainer submodelRegistry = SubmodelRegistryTestContainer.builder().build();
 
     private SubmodelRegistryApiClient submodelRegistryApiClient;
 
@@ -46,7 +39,7 @@ public class SubmodelRegistryApiClientTests {
 
     @BeforeEach
     public void setUp() {
-        var registryUrl = "http://" + submodelRegistry.getHost() + ":" + submodelRegistry.getMappedPort(8080);
+        var registryUrl = submodelRegistry.getExternalUrl();
         this.submodelRegistryApiClient = FeignClientFactory.createClient(SubmodelRegistryApiClient.class, registryUrl, null);
     }
 
@@ -119,4 +112,3 @@ public class SubmodelRegistryApiClientTests {
         }
     }
 }
-
