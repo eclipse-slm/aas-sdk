@@ -222,7 +222,17 @@ public abstract class AbstractSubmodelRepository implements SubmodelRepository {
 
     @Override
     public OperationVariable[] invokeOperation(String submodelId, String idShortPath, OperationVariable[] input) throws ElementDoesNotExistException {
-        throw new MethodNotImplementedException();
+        var optionalSubmodelService = this.getSubmodelServiceBySubmodelId(submodelId);
+        if (optionalSubmodelService.isPresent()) {
+            return optionalSubmodelService.get().invokeOperation(idShortPath, input);
+        }
+
+        var optionalSubmodelRepository = this.getSubmodelRepositoryBySubmodelId(submodelId);
+        if (optionalSubmodelRepository.isPresent()) {
+            return optionalSubmodelRepository.get().invokeOperation(submodelId, idShortPath, input);
+        }
+
+        throw new SubmodelNotFoundException(aasId, submodelId);
     }
 
     @Override
