@@ -30,7 +30,7 @@ jobs:
         run: mvn --batch-mode verify "-Dgpg.skip=true"
 
   publish_snapshot:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') }}
     needs: build
     uses: ./.github/workflows/publish-snapshot.yml
     secrets:
