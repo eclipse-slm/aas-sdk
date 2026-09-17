@@ -1,6 +1,7 @@
 package org.eclipse.slm.aas.repositories.api.submodels;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.*;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultOperationResult;
 import org.eclipse.digitaltwin.basyx.core.pagination.CursorResult;
 import org.eclipse.digitaltwin.basyx.core.pagination.PaginationInfo;
 import org.eclipse.digitaltwin.basyx.http.pagination.Base64UrlEncodedCursor;
@@ -26,7 +27,11 @@ public abstract class MultiSubmodelServiceHTTPApiController implements MultiSubm
 
 	private static final PaginationInfo NO_LIMIT_PAGINATION_INFO = new PaginationInfo(0, null);
 
-	private SubmodelService service;
+	private final SubmodelService service;
+
+	protected MultiSubmodelServiceHTTPApiController(SubmodelService service) {
+		this.service = service;
+	}
 
 	@Override
 	public ResponseEntity<Void> deleteSubmodelElementByPath(String aasId, String idShortPath) {
@@ -110,7 +115,14 @@ public abstract class MultiSubmodelServiceHTTPApiController implements MultiSubm
 
 	@Override
 	public ResponseEntity<OperationResult> invokeOperation(String aasId, String idShortPath, OperationRequest body) {
-		throw new MethodNotImplementedException();
+		var input = body.getInputArguments().toArray(new OperationVariable[0]);
+		var output = service.invokeOperation(idShortPath, input);
+
+		var result = new DefaultOperationResult.Builder()
+				.outputArguments(List.of(output))
+				.build();
+
+		return new ResponseEntity<OperationResult>(result, HttpStatus.OK);
 	}
 
 	@Override
