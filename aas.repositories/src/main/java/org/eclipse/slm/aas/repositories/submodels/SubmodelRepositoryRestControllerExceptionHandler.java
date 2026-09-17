@@ -1,6 +1,6 @@
 package org.eclipse.slm.aas.repositories.submodels;
 
-import org.eclipse.digitaltwin.aas4j.v3.model.MessageTypeEnum;
+import org.eclipse.digitaltwin.aas4j.v3.model.MessageType;
 import org.eclipse.digitaltwin.aas4j.v3.model.Result;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultMessage;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultResult;
@@ -21,7 +21,7 @@ public class SubmodelRepositoryRestControllerExceptionHandler {
         var result = new DefaultResult.Builder().messages(
                 new DefaultMessage.Builder()
                         .code("NotFound")
-                        .messageType(MessageTypeEnum.ERROR)
+                        .messageType(MessageType.ERROR)
                         .correlationId(null)
                         .text(exception.getMessage())
                         .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss")))
