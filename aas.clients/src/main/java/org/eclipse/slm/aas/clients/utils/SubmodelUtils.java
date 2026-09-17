@@ -50,7 +50,7 @@ public class SubmodelUtils {
                 .id(submodel.getId())
                 .idShort(submodel.getIdShort())
                 .semanticId(submodel.getSemanticId())
-                .supplementalSemanticId(submodel.getSupplementalSemanticIds())
+                .supplementalSemanticIds(submodel.getSupplementalSemanticIds())
                 .description(submodel.getDescription())
                 .displayName(submodel.getDisplayName())
                 .extensions(submodel.getExtensions())

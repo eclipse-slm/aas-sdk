@@ -73,8 +73,8 @@
 
         <spring.boot.version>3.3.9</spring.boot.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
-        <basyx.version>2.0.0-milestone-07</basyx.version>
-        <aas.aas4j.version>1.0.2</aas.aas4j.version>
+        <basyx.version>2.0.0-milestone-15</basyx.version>
+        <aas.aas4j.version>2.0.2</aas.aas4j.version>
         <feign.version>13.8</feign.version>
         <swagger.version>2.2.22</swagger.version>
         <mapstruct.version>1.6.3</mapstruct.version>
