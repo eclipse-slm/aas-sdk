@@ -68,6 +68,11 @@ public class AasRepositoryClientFactory {
 
 
     public static AasRepositoryClient FromShellDescriptor(AssetAdministrationShellDescriptor shellDescriptor) {
+        return AasRepositoryClientFactory.FromShellDescriptor(shellDescriptor, null);
+    }
+
+    public static AasRepositoryClient FromShellDescriptor(AssetAdministrationShellDescriptor shellDescriptor,
+                                                         JwtAuthenticationToken jwtAuthenticationToken) {
         var shellEndpoint = shellDescriptor.getEndpoints().get(0).getProtocolInformation().getHref();
 
         if (shellEndpoint.contains("/shells/")) {
@@ -76,9 +81,11 @@ public class AasRepositoryClientFactory {
             var matchesFound = matcher.find();
             if (matchesFound) {
                 var aasRepositoryBaseUrl = matcher.group(1);
-                var aasRepositoryClient = new AasRepositoryClient(aasRepositoryBaseUrl);
-
-                return aasRepositoryClient;
+                if (jwtAuthenticationToken == null) {
+                    return new AasRepositoryClient(aasRepositoryBaseUrl);
+                } else {
+                    return new AasRepositoryClient(aasRepositoryBaseUrl, new JwtAuthenticationTokenAuthRequestInterceptor(jwtAuthenticationToken));
+                }
             }
         }
 
