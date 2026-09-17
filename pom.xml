@@ -6,7 +6,7 @@
 
     <groupId>org.eclipse.slm</groupId>
     <artifactId>aas</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Eclipse SLM - AAS SDK</name>
@@ -71,8 +71,8 @@
         <maven.plugin.surefire>3.2.5</maven.plugin.surefire>
         <gpg.skip>false</gpg.skip>
 
-        <spring.boot.version>3.3.9</spring.boot.version>
-        <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <spring.boot.version>4.1.0</spring.boot.version>
+        <spring-cloud.version>2025.1.0</spring-cloud.version>
         <basyx.version>2.0.0-milestone-15</basyx.version>
         <aas.aas4j.version>2.0.2</aas.aas4j.version>
         <feign.version>13.8</feign.version>
@@ -109,6 +109,11 @@
             <dependency>
                 <groupId>org.eclipse.digitaltwin.aas4j</groupId>
                 <artifactId>aas4j-dataformat-aasx</artifactId>
+                <version>${aas.aas4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.digitaltwin.aas4j</groupId>
+                <artifactId>aas4j-model</artifactId>
                 <version>${aas.aas4j.version}</version>
             </dependency>
             <!-- Testing !-->
