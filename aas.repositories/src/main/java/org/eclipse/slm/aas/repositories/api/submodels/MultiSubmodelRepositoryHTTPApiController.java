@@ -2,8 +2,10 @@ package org.eclipse.slm.aas.repositories.api.submodels;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.OperationRequest;
 import org.eclipse.digitaltwin.aas4j.v3.model.OperationResult;
+import org.eclipse.digitaltwin.aas4j.v3.model.OperationVariable;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultOperationResult;
 import org.eclipse.digitaltwin.basyx.core.pagination.CursorResult;
 import org.eclipse.digitaltwin.basyx.core.pagination.PaginationInfo;
 import org.eclipse.digitaltwin.basyx.http.Base64UrlEncodedIdentifier;
@@ -178,7 +180,18 @@ public abstract class MultiSubmodelRepositoryHTTPApiController implements MultiS
 
     @Override
     public ResponseEntity<OperationResult> invokeOperationSubmodelRepo(Base64UrlEncodedIdentifier aasId, Base64UrlEncodedIdentifier submodelIdentifier, String idShortPath, OperationRequest body, Boolean async) {
-        throw new MethodNotImplementedException();
+        if (Boolean.TRUE.equals(async)) {
+            throw new MethodNotImplementedException();
+        }
+
+        var input = body.getInputArguments().toArray(new OperationVariable[0]);
+        var output = submodelRepositoryFactory.getSubmodelRepository(aasId.getIdentifier()).invokeOperation(submodelIdentifier.getIdentifier(), idShortPath, input);
+
+        var result = new DefaultOperationResult.Builder()
+                .outputArguments(List.of(output))
+                .build();
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @Override

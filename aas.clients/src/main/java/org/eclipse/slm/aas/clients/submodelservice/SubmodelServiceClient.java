@@ -1,9 +1,11 @@
 package org.eclipse.slm.aas.clients.submodelservice;
 
+import org.eclipse.digitaltwin.aas4j.v3.model.OperationVariable;
 import org.eclipse.digitaltwin.aas4j.v3.model.Property;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelDescriptor;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
+import org.eclipse.digitaltwin.basyx.core.exceptions.ElementDoesNotExistException;
 import org.eclipse.digitaltwin.basyx.submodelservice.client.ConnectedSubmodelService;
 import org.eclipse.digitaltwin.basyx.submodelservice.client.internal.SubmodelServiceApi;
 import org.eclipse.slm.aas.clients.auth.AuthRequestInterceptor;
@@ -33,6 +35,11 @@ public class SubmodelServiceClient {
         var submodelServiceApi = new SubmodelServiceApi(apiClient);
 
         this.submodelService = new ConnectedSubmodelService(submodelServiceApi);
+    }
+
+    SubmodelServiceClient(String submodelServiceUrl, ConnectedSubmodelService submodelService) {
+        this.submodelServiceUrl = submodelServiceUrl;
+        this.submodelService = submodelService;
     }
 
     public static SubmodelServiceClient FromSubmodelDescriptor(SubmodelDescriptor submodelDescriptor, JwtAuthenticationToken jwtAuthenticationToken) {
@@ -87,5 +94,9 @@ public class SubmodelServiceClient {
         }
 
         return submodelElementValues;
+    }
+
+    public OperationVariable[] invokeOperation(String idShortPath, OperationVariable[] input) throws ElementDoesNotExistException {
+        return this.submodelService.invokeOperation(idShortPath, input);
     }
 }

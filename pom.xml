@@ -68,6 +68,7 @@
         <maven.plugin.gpg>3.2.8</maven.plugin.gpg>
         <maven.plugin.source>3.3.1</maven.plugin.source>
         <maven.plugin.javadoc>3.7.0</maven.plugin.javadoc>
+        <maven.plugin.surefire>3.2.5</maven.plugin.surefire>
         <gpg.skip>false</gpg.skip>
 
         <spring.boot.version>3.3.9</spring.boot.version>
@@ -182,6 +183,16 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.plugin.surefire}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.sonatype.central</groupId>
